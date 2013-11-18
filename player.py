@@ -1,3 +1,5 @@
+import card
+
 class Player:
 	handNames = ['High', 'Pair', 'Two Pair', 'Three of a Kind', 'Straight', 'Flush', 'Full House', 'Four of a Kind', 'Straight Flush', 'Royal Flush']
 	
@@ -24,8 +26,20 @@ class Player:
 		return self.cards.pop(card)
 
 	def getType(self):
-		return self.handNames[self.calcValue()]
+		return self.handNames[self.calcValue()[0]]
+	
+	# returns the tiebreaker values
+	def ties(self):
+		temp = self.calcValue()
+		if len(temp) <= 1:
+			return "No ties."
 		
+		str = ""
+		for i in range(1, len(temp)):
+			str += card.Card.rankNames[temp[i]]
+			str += " "
+		return str
+	
 	def calcValue(self):
 		# check for matches
 		m1 = -1
@@ -56,12 +70,22 @@ class Player:
 				count += 1
 		
 		# return index based on number of matched
+		temp = []
 		if count == 2:
-			return 1
+			temp.append(1)
 		elif count == 3:
-			return 3
+			temp.append(3)
 		else:
-			return 7
+			temp.append(7)
+		
+		# add the pair/triple/quad as the first tiebreaker
+		temp.append(m1)
+		
+		# then compare all other single cards
+		for i in range(4, -1, -1):
+			if self.cards[i].rank != m1:
+				temp.append(self.cards[i].rank)
+		return tuple(temp)
 
 	def calc2Pair(self, m1, m2):
 		count1 = 0
@@ -76,32 +100,56 @@ class Player:
 		
 		# return index based on number of matched
 		if count1 == 2 and count2 == 2:
-			return 2
+			temp = []
+			# for ties, first compare the pairs, then check the singleton
+			if m1 > m2:
+				temp = [m1, m2]
+			else:
+				temp = [m2, m1]
+			
+			# add the singleton
+			for i in range(0, 5):
+				if self.cards[i].rank != m1 and self.cards[i].rank != m2:
+					temp.append(self.cards[i].rank)
+					break
+			return tuple(temp)
 		elif (count1 == 3 and count2 == 2) or (count1 == 2 and count2 == 3):
-			return 6
+			# for full house ties, check the triple, then the pair
+			if m1 > m2:
+				return (6, m1, m2)
+			else:
+				return (6, m2, m1)
 		else:
 			print "SOMETHING WENT WRONG IN 2PAIR"
-			return 0
+			return (0)
 	
 	def calcNoMatch(self):
 		straight = self.checkStraight()
 		flush = self.checkFlush()
 		# if straight, but not flush, then straight
 		if straight and not flush:
-			return 4
-		# if flush, but not straight, then flush
-		elif not straight and flush:
-			return 5
+			# tie breaker is highest card
+			return (4, self.cards[4].rank)
+			
 		# if straight and flush, straight flush, but check for royal
 		elif straight and flush:
 			if self.cards[0] == 8:
-				return 9
+				return (9)
 			else:
-				return 8
+				return (8,self.cards[4].rank)
 		
-		# if neither straight or flush, it must be high card
+		# treating flush and high card the same because they compare the same
 		else:
-			return 0
+			# set type based on whether it is a flush
+			if flush:
+				temp = [5]
+			else:
+				temp = [0]
+			
+			# compare highest cards for ties
+			for i in range(4, -1, -1):
+				temp.append(self.cards[i].rank)
+			return tuple(temp)
 
 	# returns true if the cards are a straight and false otherwise
 	def checkStraight(self):

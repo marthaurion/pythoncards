@@ -10,4 +10,4 @@ p1.draw(d, 5)
 print d
 print d.size()
 print p1
-print p1.getType()
+print p1.getType(), p1.ties()
