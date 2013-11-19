@@ -7,4 +7,5 @@ Programs so far:
 - card games
 
 Things to do:
-- add comparison functions to player class
+- graphical interface
+- create a container for the game

@@ -3,6 +3,7 @@ import card
 class Player:
 	handNames = ['High', 'Pair', 'Two Pair', 'Three of a Kind', 'Straight', 'Flush', 'Full House', 'Four of a Kind', 'Straight Flush', 'Royal Flush']
 	
+	# override object methods
 	def __init__(self):
 		self.cards = []
 	
@@ -10,6 +11,54 @@ class Player:
 		middle = ", ".join([str(card) for card in self.cards])
 		return "[" + middle + "]"
 	
+	# comparison operators
+	def __eq__(self, h2):
+		val1 = self.calcValue()
+		val2 = h2.calcValue()
+		
+		# if you don't check the first value up front
+		# the lists could be different length
+		if val1[0] != val2[0]:
+			return False
+		
+		# if the first element of the value is the same
+		# the two lists should have the same length
+		elif len(val1) > 1:
+			for i in range(1, len(val1)):
+				if val1[i] != val2[i]:
+					return False
+
+		# if it reaches the end, the two are equal
+		return True
+	
+	def __gt__(self, h2):
+		val1 = self.calcValue()
+		val2 = h2.calcValue()
+		# if the first element of the value is the same
+		# the two lists should have the same length
+		if val1[0] != val2[0]:
+			return val1[0] > val2[0]
+		elif len(val1) > 1:
+			for i in range(1, len(val1)):
+				if val1[i] != val2[i]:
+					return val1[i] > val2[i]
+		# if it reaches the end, the two are equal
+		return False
+
+	def __lt__(self, h2):
+		val1 = self.calcValue()
+		val2 = h2.calcValue()
+		# if the first element of the value is the same
+		# the two lists should have the same length
+		if val1[0] != val2[0]:
+			return val1[0] < val2[0]
+		elif len(val1) > 1:
+			for i in range(1, len(val1)):
+				if val1[i] != val2[i]:
+					return val1[i] < val2[i]
+		# if it reaches the end, the two are equal
+		return False
+		
 	def size(self):
 		return len(self.cards)
 	
@@ -29,6 +78,7 @@ class Player:
 		return self.handNames[self.calcValue()[0]]
 	
 	# returns the tiebreaker values
+	# this is mostly for debug
 	def ties(self):
 		temp = self.calcValue()
 		if len(temp) <= 1:
@@ -163,6 +213,6 @@ class Player:
 	def checkFlush(self):
 		# loop through and check for the same suit
 		for i in range(1, self.size()):
-			if self.cards[i].suit != self.cards[i-1].rank:
+			if self.cards[i].suit != self.cards[i-1].suit:
 				return False
 		return True
