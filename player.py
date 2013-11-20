@@ -150,12 +150,12 @@ class Player:
 		
 		# return index based on number of matched
 		if count1 == 2 and count2 == 2:
-			temp = []
+			temp = [2]
 			# for ties, first compare the pairs, then check the singleton
 			if m1 > m2:
-				temp = [m1, m2]
+				temp = [2, m1, m2]
 			else:
-				temp = [m2, m1]
+				temp = [2, m2, m1]
 			
 			# add the singleton
 			for i in range(0, 5):
