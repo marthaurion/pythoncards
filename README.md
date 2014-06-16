@@ -1,11 +1,7 @@
-pythonstuff
+Python Cards
 ===========
-
-Putting together all my python programs.
-
-Programs so far:
-- card games
+Recreating a card game in Python to learn about the language.
 
 Things to do:
 - graphical interface
-- create a container for the game
+- AI hasn't been programmed yet
