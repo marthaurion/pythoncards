@@ -11,7 +11,7 @@ class Deck:
         random.shuffle(self.cards)
 
     def __str__(self):
-        middle = ", ".join([str(card) for card in self.cards])
+        middle = ", ".join([str(card_i) for card_i in self.cards])
         return "[" + middle + "]"
 
     def shuffle(self):
@@ -20,8 +20,8 @@ class Deck:
     def draw(self):
         return self.cards.pop(0)
 
-    def add(self, card):
-        self.cards.append(card)
+    def add(self, new_card):
+        self.cards.append(new_card)
 
     def size(self):
         return len(self.cards)

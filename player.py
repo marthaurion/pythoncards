@@ -10,7 +10,7 @@ class Player:
         self.cards = []
 
     def __str__(self):
-        middle = ", ".join([str(card) for card in self.cards])
+        middle = ", ".join([str(card_i) for card_i in self.cards])
         return "[" + middle + "]"
 
     # comparison operators
@@ -73,11 +73,25 @@ class Player:
         self.sort()
 
     # takes an index as input
-    def discard(self, card):
-        return self.cards.pop(card)
+    def discard(self, rem_card):
+        return self.cards.pop(rem_card)
 
     def get_type(self):
         return self.handNames[self.calc_value()[0]]
+
+    # return a tuple of cards that have at least one duplicate in the hand
+    # meant to be used to prevent computers from discarding pairs
+    def get_matches(self):
+        temp = self.calc_value()
+
+        # first check the case where there is only one pair
+        if temp[0] == 1 or temp[0] == 3 or temp[0] == 7:
+            return temp[1]
+        # next check the case where there are two pairs
+        elif temp[0] == 2 or temp[0] == 6:
+            return temp[1], temp[2]
+        else:
+            return None
 
     # returns the tiebreaker values
     # this is mostly for debug
@@ -117,8 +131,8 @@ class Player:
         count = 0
 
         # count number of matched cards
-        for card in self.cards:
-            if card.rank == m1:
+        for card_i in self.cards:
+            if card_i.rank == m1:
                 count += 1
 
         # return index based on number of matched
@@ -144,15 +158,14 @@ class Player:
         count2 = 0
 
         # loop through and find number of each
-        for card in self.cards:
-            if card.rank == m1:
+        for card_i in self.cards:
+            if card_i.rank == m1:
                 count1 += 1
-            elif card.rank == m2:
+            elif card_i.rank == m2:
                 count2 += 1
 
         # return index based on number of matched
         if count1 == 2 and count2 == 2:
-            temp = [2]
             # for ties, first compare the pairs, then check the singleton
             if m1 > m2:
                 temp = [2, m1, m2]
@@ -173,7 +186,7 @@ class Player:
             else:
                 return 6, m2, m1
         else:
-            print("SOMETHING WENT WRONG IN 2PAIR")
+            print "SOMETHING WENT WRONG IN 2PAIR"
             return 0
 
     def calc_no_match(self):

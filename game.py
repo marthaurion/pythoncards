@@ -18,26 +18,26 @@ class Game:
     # displays each player's hand and value
     # mostly for debug
     def print_game_state(self):
-        print("Number of players:", NUM_PLAYERS)
+        print "Number of players:", NUM_PLAYERS
         for i in range(0, NUM_PLAYERS):
-            print("Player", str(i + 1))
-            print(self.players[i])
-            print(self.players[i].get_type())
-            print(self.players[i].ties())
-            print()
+            print "Player",str(i + 1)
+            print self.players[i]
+            print self.players[i].get_type()
+            print self.players[i].ties()
+            print ""
 
     # for each turn
     # player is the index of the player
-    def play_hand(self, player):
-        if player != 0:
-            self.play_comp(player)
+    def play_hand(self, player_num):
+        if player_num != 0:
+            self.play_comp(player_num)
         else:
             self.player_turn()
 
     # assume the player is player 1
     def player_turn(self):
         # take input from player for which cards to remove
-        toks = input("Cards to discard: ").split(" ")  # remove cards in hand
+        toks = str(input("Cards to discard: ")).split(" ")  # remove cards in hand
         discards = 0
         for i in range(5):
             # check if the card is in the input
@@ -49,20 +49,19 @@ class Game:
         self.players[0].draw(self.deck, discards)
 
     # player is the index of the players
-    def play_comp(self, player):
+    def play_comp(self, player_num):
         discards = 0
         for i in range(5):
             if random.randrange(2) == 1:
-                temp = self.players[player].discard(i-discards)
+                temp = self.players[player_num].discard(i-discards)
                 self.deck.add(temp)
                 discards += 1
-        self.players[player].draw(self.deck, discards)
+        self.players[player_num].draw(self.deck, discards)
 
     # prints the winner
     # should change this to return the winner instead
     def find_winner(self):
         win = [0]
-        ties = False
 
         # find who has the highest score or if there is a tie
         for i in range(1, NUM_PLAYERS):
@@ -73,6 +72,6 @@ class Game:
 
         if len(win) > 1:
             temp = ", ".join(str(x+1) for x in win)
-            print("Players", temp, " tied")
+            print "Players", temp, " tied"
         else:
-            print("Player", win[0] + 1, "wins")
+            print "Player", win[0] + 1, "wins"
