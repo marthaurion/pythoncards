@@ -18,13 +18,12 @@ class Game:
     # displays each player's hand and value
     # mostly for debug
     def print_game_state(self):
-        print "Number of players:", NUM_PLAYERS
+        print("Number of players:" + NUM_PLAYERS)
         for i in range(0, NUM_PLAYERS):
-            print "Player",str(i + 1)
-            print self.players[i]
-            print self.players[i].get_type()
-            print self.players[i].ties()
-            print ""
+            print("Player"+str(i + 1))
+            print(self.players[i])
+            print(self.players[i].get_type())
+            print(self.players[i].ties())
 
     # for each turn
     # player is the index of the player
@@ -72,6 +71,6 @@ class Game:
 
         if len(win) > 1:
             temp = ", ".join(str(x+1) for x in win)
-            print "Players", temp, " tied"
+            print("Players"+temp+" tied")
         else:
-            print "Player", win[0] + 1, "wins"
+            print("Player"+str(win[0] + 1)+"wins")

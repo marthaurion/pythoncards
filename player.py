@@ -186,7 +186,7 @@ class Player:
             else:
                 return 6, m2, m1
         else:
-            print "SOMETHING WENT WRONG IN 2PAIR"
+            print("SOMETHING WENT WRONG IN 2PAIR")
             return 0
 
     def calc_no_match(self):
